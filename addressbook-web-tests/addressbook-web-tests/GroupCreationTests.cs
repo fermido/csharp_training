@@ -9,17 +9,17 @@ namespace WebAdressbookTests
         [Test]
         public void GroupCreationTest()
         {
-            OpenHomePage();
-            Login(new AccountData("admin","secret"));
-            GoToGroupsPage();
-            InitGroupCreation();
+            navigationHelper.OpenHomePage();
+            loginHelper.Login(new AccountData("admin","secret"));
+            navigationHelper.GoToGroupsPage();
+            groupHelper.InitGroupCreation();
             GroupData group = new GroupData("a");
             group.Header = "b";
             group.Footer = "c";
-            FillGroupForm(group);
-            SubmitGroupForm();
-            ReturnToGroupsPage();
-            LogOut();
+            groupHelper.FillGroupForm(group);
+            groupHelper.SubmitGroupForm();
+            navigationHelper.ReturnToGroupsPage();
+            loginHelper.LogOut();
         }
     }
 }

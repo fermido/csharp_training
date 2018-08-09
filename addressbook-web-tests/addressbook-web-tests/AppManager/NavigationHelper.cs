@@ -2,12 +2,11 @@
 
 namespace WebAddressbookTests
 {
-    public class NavigationHelper
+    public class NavigationHelper : HelperBase
     {
-        private IWebDriver driver;
         private string baseURL;
 
-        public NavigationHelper(IWebDriver driver, string baseURL) {
+        public NavigationHelper(IWebDriver driver, string baseURL) : base(driver) {
             this.driver = driver;
             this.baseURL = baseURL;
         }
@@ -20,11 +19,6 @@ namespace WebAddressbookTests
         public void OpenHomePage()
         {
             driver.Navigate().GoToUrl(baseURL + "addressbook/");
-        }
-
-        public void ReturnToGroupsPage()
-        {
-            driver.FindElement(By.LinkText("group page")).Click();
         }
     }
 }

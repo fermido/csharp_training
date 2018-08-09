@@ -1,13 +1,15 @@
-﻿using NUnit.Framework;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Firefox;
-using OpenQA.Selenium.Support.UI;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace WebAddressbookTests
 {
-    public class TestBase
+    public class ApplicationManager
     {
         protected IWebDriver driver;
         protected string baseURL;
@@ -19,26 +21,54 @@ namespace WebAddressbookTests
         protected ContactHelper contactHelper;
         protected PrimitiveHelper primitiveHelper;
 
-        [SetUp]
-        public void SetupTest()
+        public LoginHelper Auth
         {
+            get
+            {
+                return loginHelper;
+            }
+        }
+        
+        public NavigationHelper Navigation
+        {
+            get
+            {
+                return navigationHelper;
+            }
+        }
+   
+        public GroupHelper Groups
+        {
+            get
+            {
+                return groupHelper;
+            }
+        }
+
+        public ContactHelper Contacts
+        {
+            get
+            {
+                return contactHelper;
+            }
+        }
+
+        public ApplicationManager() {
             verificationErrors = new StringBuilder();
             FirefoxOptions options = new FirefoxOptions();
             options.BrowserExecutableLocation = @"c:\Program Files\Mozilla Firefox\firefox.exe";
             options.UseLegacyImplementation = true;
             driver = new FirefoxDriver(options);
             baseURL = "http://localhost/";
+
             loginHelper = new LoginHelper(driver);
             navigationHelper = new NavigationHelper(driver, baseURL);
             groupHelper = new GroupHelper(driver);
             contactHelper = new ContactHelper(driver);
             primitiveHelper = new PrimitiveHelper(driver);
+        }
 
-         }
-
-        [TearDown]
-        public void TeardownTest()
-        {
+        public void Stop() {
             try
             {
                 driver.Quit();

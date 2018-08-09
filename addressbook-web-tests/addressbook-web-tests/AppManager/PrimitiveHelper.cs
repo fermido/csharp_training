@@ -7,12 +7,11 @@ using System.Threading.Tasks;
 
 namespace WebAddressbookTests
 {
-    public class PrimitiveHelper
+    public class PrimitiveHelper : HelperBase
     {
         private bool acceptNextAlert = true;
-        private IWebDriver driver;
-
-        public PrimitiveHelper(IWebDriver driver) {
+        
+        public PrimitiveHelper(IWebDriver driver) : base(driver) {
             this.driver = driver;
         }
 

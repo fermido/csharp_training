@@ -9,6 +9,12 @@ namespace WebAddressbookTests
 {
     public class GroupHelper : HelperBase
     {
+        public GroupHelper InitGroupRemoval()
+        {
+            driver.FindElement(By.Name("delete")).Click();
+            return this;
+        }
+
         public GroupHelper(IWebDriver driver) : base(driver) {
             this.driver = driver;
         }
@@ -30,9 +36,27 @@ namespace WebAddressbookTests
             return this;
         }
 
+        public GroupHelper SubmitGroupModificationForm()
+        {
+            driver.FindElement(By.Name("update")).Click();
+            return this;
+        }
+
+        public GroupHelper InitGroupModification()
+        {
+            driver.FindElement(By.Name("edit")).Click();
+            return this;
+        }
+
         public GroupHelper InitGroupCreation()
         {
             driver.FindElement(By.Name("new")).Click();
+            return this;
+        }
+
+        public GroupHelper SelectGroup(int index)
+        {
+            driver.FindElement(By.XPath("(//input[@name='selected[]'])[" + index + "]")).Click();
             return this;
         }
 

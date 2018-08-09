@@ -20,6 +20,12 @@ namespace WebAddressbookTests
             return this;
         }
 
+        public ContactHelper SubmitNewContactData()
+        {
+            driver.FindElement(By.Name("update")).Click();
+            return this;
+        }
+
         public ContactHelper FillContactForm(ContactData contact)
         {
             driver.FindElement(By.Name("firstname")).Clear();
@@ -32,6 +38,7 @@ namespace WebAddressbookTests
             driver.FindElement(By.Name("nickname")).SendKeys(contact.NickName);
             driver.FindElement(By.Name("title")).Clear();
             driver.FindElement(By.Name("title")).SendKeys(contact.Title);
+            /*
             driver.FindElement(By.Name("company")).Clear();
             driver.FindElement(By.Name("company")).SendKeys(contact.Company);
             driver.FindElement(By.Name("address")).Clear();
@@ -66,12 +73,37 @@ namespace WebAddressbookTests
             driver.FindElement(By.Name("phone2")).SendKeys(contact.Phone);
             driver.FindElement(By.Name("notes")).Clear();
             driver.FindElement(By.Name("notes")).SendKeys(contact.Notes);
+            */
             return this;
         }
 
         public ContactHelper InitNewContactCreation()
         {
             driver.FindElement(By.LinkText("add new")).Click();
+            return this;
+        }
+
+        public ContactHelper SelectGroup(int v)
+        {
+            driver.FindElement(By.XPath(".//*[@id='maintable']/tbody/tr[" + (v + 1) + "]/td[1]")).Click();
+            return this;
+        }
+
+        public ContactHelper InitContactRemoval()
+        {
+            driver.FindElement(By.XPath("//input[@value='Delete']")).Click();
+            return this;
+        }
+
+        public ContactHelper ConfirmContactRemoval()
+        {
+            driver.SwitchTo().Alert().Accept();
+            return this;
+        }
+
+        public ContactHelper EditContact(int v)
+        {
+            driver.FindElement(By.XPath(".//*[@id='maintable']/tbody/tr[" + (v+1) + "]/td[8]/a/img")).Click();
             return this;
         }
     }

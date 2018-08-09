@@ -11,15 +11,18 @@ namespace WebAddressbookTests
     {
         protected IWebDriver driver;
         protected string baseURL;
+        protected StringBuilder verificationErrors;
 
         protected LoginHelper loginHelper;
         protected NavigationHelper navigationHelper;
         protected GroupHelper groupHelper;
         protected ContactHelper contactHelper;
+        protected PrimitiveHelper primitiveHelper;
 
         [SetUp]
         public void SetupTest()
         {
+            verificationErrors = new StringBuilder();
             FirefoxOptions options = new FirefoxOptions();
             options.BrowserExecutableLocation = @"c:\Program Files\Mozilla Firefox\firefox.exe";
             options.UseLegacyImplementation = true;
@@ -29,6 +32,8 @@ namespace WebAddressbookTests
             navigationHelper = new NavigationHelper(driver, baseURL);
             groupHelper = new GroupHelper(driver);
             contactHelper = new ContactHelper(driver);
+            primitiveHelper = new PrimitiveHelper(driver);
+
          }
 
         [TearDown]
@@ -41,6 +46,7 @@ namespace WebAddressbookTests
             catch (Exception)
             {
                 // Ignore errors if unable to close the browser
+                Assert.AreEqual("", verificationErrors.ToString());
             }
         }
     }

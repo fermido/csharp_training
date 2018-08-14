@@ -18,8 +18,13 @@ namespace WebAddressbookTests
             newData.Header = "b1";
             newData.Footer = "c1";
 
+            if (!app.Groups.IsGroupExisted())
+            {
+                app.Groups.CreateNewGroup(newData);
+            }
+
             app.Groups
-                .SelectGroup(1)
+                .SelectGroup("[1]")
                 .InitGroupModification()
                 .FillGroupForm(newData)
                 .SubmitGroupModificationForm()

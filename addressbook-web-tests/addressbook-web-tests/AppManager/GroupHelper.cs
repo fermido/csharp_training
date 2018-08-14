@@ -15,6 +15,11 @@ namespace WebAddressbookTests
             return this;
         }
 
+        public bool IsGroupExisted()
+        {
+            return IsElementPresented(By.XPath(".//*[@id='content']/form/span"));
+        }
+
         public GroupHelper(IWebDriver driver) : base(driver) {
             this.driver = driver;
         }
@@ -54,9 +59,9 @@ namespace WebAddressbookTests
             return this;
         }
 
-        public GroupHelper SelectGroup(int index)
+        public GroupHelper SelectGroup(string index)
         {
-            driver.FindElement(By.XPath("(//input[@name='selected[]'])[" + index + "]")).Click();
+            driver.FindElement(By.XPath("(//input[@name='selected[]'])" + index )).Click();
             return this;
         }
 
@@ -64,6 +69,13 @@ namespace WebAddressbookTests
         {
             driver.FindElement(By.LinkText("group page")).Click();
             return this;
+        }
+
+        public void CreateNewGroup(GroupData group)
+        {
+            InitGroupCreation();
+            FillGroupForm(group);
+            SubmitGroupForm();
         }
     }
 }

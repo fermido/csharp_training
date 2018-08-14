@@ -77,6 +77,11 @@ namespace WebAddressbookTests
             return this;
         }
 
+        public bool IsContactExisted()
+        {
+            return IsElementPresented(By.XPath(".//*[@id='maintable']/tbody/tr[2]/td[1]"));
+        }
+
         public ContactHelper InitNewContactCreation()
         {
             driver.FindElement(By.LinkText("add new")).Click();
@@ -106,5 +111,13 @@ namespace WebAddressbookTests
             driver.FindElement(By.XPath(".//*[@id='maintable']/tbody/tr[" + (v+1) + "]/td[8]/a/img")).Click();
             return this;
         }
+
+        public void CreateNewContact(ContactData contact)
+        {
+            InitNewContactCreation();
+            FillContactForm(contact);
+            SubmitNewContactCreation();
+        }
+
     }
 }

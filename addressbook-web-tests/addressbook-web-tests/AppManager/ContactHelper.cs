@@ -14,30 +14,36 @@ namespace WebAddressbookTests
         public ContactHelper SubmitNewContactCreation()
         {
             driver.FindElement(By.Name("submit")).Click();
+            contactCache = null;
             return this;
         }
 
         public ContactHelper SubmitNewContactData()
         {
             driver.FindElement(By.Name("update")).Click();
+            contactCache = null;
             return this;
         }
 
+        private List<ContactData> contactCache = null;
+
         public List<ContactData> GetContactList()
         {
-            List<ContactData> contacts = new List<ContactData>();
-
-            ICollection<IWebElement> elements = driver.FindElements(By.XPath(".//*[@id='maintable']/tbody/tr"));
-
-            for (int i = 1; i < elements.Count; i++)
+            if (contactCache == null)
             {
-                var lastName = driver.FindElement(By.XPath(".//*[@id='maintable']/tbody/tr[" + (i+1) + "]/td[2]"));
-                var firstName = driver.FindElement(By.XPath(".//*[@id='maintable']/tbody/tr[" + (i+1) + "]/td[3]"));
+                contactCache = new List<ContactData>();
+                ICollection<IWebElement> elements = driver.FindElements(By.XPath(".//*[@id='maintable']/tbody/tr"));
 
-                ContactData contact = new ContactData(lastName.Text,firstName.Text);
-                contacts.Add(contact);
+                for (int i = 1; i < elements.Count; i++)
+                {
+                    var lastName = driver.FindElement(By.XPath(".//*[@id='maintable']/tbody/tr[" + (i + 1) + "]/td[2]"));
+                    var firstName = driver.FindElement(By.XPath(".//*[@id='maintable']/tbody/tr[" + (i + 1) + "]/td[3]"));
+
+                    ContactData contact = new ContactData(lastName.Text, firstName.Text);
+                    contactCache.Add(contact);
+                }
             }
-            return contacts;
+            return new List<ContactData>(contactCache);
         }
 
         public ContactHelper FillContactForm(ContactData contact)
@@ -117,6 +123,7 @@ namespace WebAddressbookTests
         public ContactHelper ConfirmContactRemoval()
         {
             driver.SwitchTo().Alert().Accept();
+            contactCache = null;
             return this;
         }
 

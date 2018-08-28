@@ -1,10 +1,7 @@
 ﻿using OpenQA.Selenium;
-using OpenQA.Selenium.Support.UI;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace WebAddressbookTests
 {
@@ -24,6 +21,23 @@ namespace WebAddressbookTests
         {
             driver.FindElement(By.Name("update")).Click();
             return this;
+        }
+
+        public List<ContactData> GetContactList()
+        {
+            List<ContactData> contacts = new List<ContactData>();
+
+            ICollection<IWebElement> elements = driver.FindElements(By.XPath(".//*[@id='maintable']/tbody/tr"));
+
+            for (int i = 1; i < elements.Count; i++)
+            {
+                var lastName = driver.FindElement(By.XPath(".//*[@id='maintable']/tbody/tr[" + (i+1) + "]/td[2]"));
+                var firstName = driver.FindElement(By.XPath(".//*[@id='maintable']/tbody/tr[" + (i+1) + "]/td[3]"));
+
+                ContactData contact = new ContactData(lastName.Text,firstName.Text);
+                contacts.Add(contact);
+            }
+            return contacts;
         }
 
         public ContactHelper FillContactForm(ContactData contact)

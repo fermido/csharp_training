@@ -1,9 +1,5 @@
 ﻿using NUnit.Framework;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace WebAddressbookTests
 {
@@ -23,13 +19,17 @@ namespace WebAddressbookTests
                 app.Groups.CreateNewGroup(newData);
             }
 
+            List<GroupData> oldGroups = app.Groups.GetGroupList();
+
             app.Groups
                 .SelectGroup("[1]")
                 .InitGroupModification()
                 .FillGroupForm(newData)
                 .SubmitGroupModificationForm()
                 .ReturnToGroupsPage();
-
+            
+            List<GroupData> newGroups = app.Groups.GetGroupList();
+            Assert.AreEqual(oldGroups.Count, newGroups.Count);
             app.Auth.LogOut();
         }
 }

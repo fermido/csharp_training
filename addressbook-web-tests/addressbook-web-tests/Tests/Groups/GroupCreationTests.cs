@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using System.Collections.Generic;
 using WebAddressbookTests;
 
 namespace WebAdressbookTests 
@@ -13,13 +14,12 @@ namespace WebAdressbookTests
             GroupData group = new GroupData("a");
             group.Header = "b";
             group.Footer = "c";
+            List<GroupData> oldGroups = app.Groups.GetGroupList();
 
-            app.Groups
-                .InitGroupCreation()
-                .FillGroupForm(group)
-                .SubmitGroupForm()
-                .ReturnToGroupsPage();
+            app.Groups.CreateNewGroup(group);
 
+            List<GroupData> newGroups = app.Groups.GetGroupList();
+            Assert.AreEqual(oldGroups.Count + 1, newGroups.Count);                      
             app.Auth.LogOut();
         }
     }

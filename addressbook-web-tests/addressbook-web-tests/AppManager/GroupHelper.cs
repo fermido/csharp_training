@@ -1,9 +1,5 @@
 ﻿using OpenQA.Selenium;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace WebAddressbookTests
 {
@@ -18,6 +14,19 @@ namespace WebAddressbookTests
         public bool IsGroupExisted()
         {
             return IsElementPresented(By.XPath(".//*[@id='content']/form/span"));
+        }
+
+        public List<GroupData> GetGroupList()
+        {
+            List<GroupData> groups = new List<GroupData>();
+            ICollection<IWebElement> elements = driver.FindElements(By.CssSelector("span.group"));
+
+            foreach (IWebElement element in elements)
+            {
+                GroupData group = new GroupData(element.Text);
+                groups.Add(group);
+            }
+            return groups;
         }
 
         public GroupHelper(IWebDriver driver) : base(driver) {
@@ -76,6 +85,7 @@ namespace WebAddressbookTests
             InitGroupCreation();
             FillGroupForm(group);
             SubmitGroupForm();
+            ReturnToGroupsPage();
         }
     }
 }

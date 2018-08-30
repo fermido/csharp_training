@@ -33,15 +33,16 @@ namespace WebAddressbookTests
         private string notes = "";
         private string allPhones;
         private string allMails;
+        private string allData;
 
-        public ContactData(string firstName,string lastName)
+        public ContactData(string firstName, string lastName)
         {
             FirstName = firstName;
             LastName = lastName;
         }
 
         public string FirstName { get; set; }
-        
+
         public string LastName { get; set; }
 
         public string MiddleName
@@ -68,41 +69,61 @@ namespace WebAddressbookTests
             set { company = value; }
         }
 
-        public string Address1
+        public string HomePhone
         {
             get
             {
-                if (address1 == null)
+                if (home == null)
                 {
                     return "";
                 }
                 else
                 {
-                    return Regex.Replace(address1, "[ \r\n]", ""); 
+                    return home;
                 }
             }
             set
             {
-                address1 = value;
+                home = value;
             }
-        }
-
-        public string HomePhone
-        {
-            get { return home; }
-            set { home = value; }
         }
 
         public string MobilePhone
         {
-            get { return mobile; }
-            set { mobile = value; }
+            get
+            {
+                if (mobile == null)
+                {
+                    return "";
+                }
+                else
+                {
+                    return mobile;
+                }
+            }
+            set
+            {
+                mobile = value;
+            }
         }
 
         public string WorkPhone
         {
-            get { return work; }
-            set { work = value; }
+           get
+            {
+                if (work == null)
+                {
+                    return "";
+                }
+                else
+                {
+                    return work;
+                }
+            }
+            set
+            {
+                work = value;
+            }
         }
 
         public string Fax
@@ -113,7 +134,7 @@ namespace WebAddressbookTests
 
         public string Email1
         {
-            get { return email1 ; }
+            get { return email1; }
             set { email1 = value; }
         }
 
@@ -189,6 +210,25 @@ namespace WebAddressbookTests
             set { notes = value; }
         }
 
+        public string Address1
+        {
+            get
+            {
+                if (address1 == null)
+                {
+                    return "";
+                }
+                else
+                {
+                    return Regex.Replace(address1, "[ \r\n]", "");
+                }
+            }
+            set
+            {
+                address1 = value;
+            }
+        }
+
         public string AllMails
         {
             get
@@ -224,6 +264,69 @@ namespace WebAddressbookTests
             set
             {
                 allPhones = value;
+            }
+        }
+
+        public string AllData
+        {
+            get
+            {
+                if (allData != null)
+                {
+                    return allData;
+                }
+                else
+                {
+                    allData =
+                        NameProccessing(FirstName) + NameProccessing(MiddleName) + LastName
+                        + NickName + Title + Company + Address1
+                        + PhoneProcessing(HomePhone)
+                        + PhoneProcessing(MobilePhone)
+                        + PhoneProcessing(WorkPhone)
+                        + Email1 + Email2 + Email3
+                        + Address2;
+                    return allData;
+                }
+            }
+            set
+            {
+                allData = value;
+            }
+        }
+
+        private string NameProccessing(string name)
+        {
+            if (name == null || name == "")
+            {
+                return "";
+            }
+            else
+            {
+                return name + " ";
+            }
+        }
+
+        private string PhoneProcessing(string phone)
+        {
+            if (phone == null || phone == "")
+            {
+                return "";
+            }
+            else
+            {
+                if (phone == HomePhone)
+                {
+                    return "H: " + HomePhone;
+                }
+                else if(phone == MobilePhone)
+                {
+                    return "M: " + MobilePhone;
+                }
+                else if (phone == WorkPhone)
+                {
+                    return "W: " + WorkPhone;
+                }
+                else throw new InvalidOperationException("unknown phone");
             }
         }
 

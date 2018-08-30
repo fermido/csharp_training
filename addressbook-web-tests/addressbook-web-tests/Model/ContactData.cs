@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace WebAddressbookTests
 {
     public class ContactData : IEquatable<ContactData>
     {
-        private string firstName;
-        private string lastName;
         private string middleName = "";
         private string nickName = "";
         private string title = "";
@@ -32,24 +31,18 @@ namespace WebAddressbookTests
         private string address2 = "";
         private string phone = "";
         private string notes = "";
+        private string allPhones;
+        private string allMails;
 
         public ContactData(string firstName,string lastName)
         {
-            this.firstName = firstName;
-            this.lastName = lastName;
+            FirstName = firstName;
+            LastName = lastName;
         }
 
-        public string FirstName
-        {
-            get { return firstName; }
-            set { firstName = value; }
-        }
-
-        public string LastName
-        {
-            get { return lastName; }
-            set { lastName = value; }
-        }
+        public string FirstName { get; set; }
+        
+        public string LastName { get; set; }
 
         public string MiddleName
         {
@@ -77,23 +70,36 @@ namespace WebAddressbookTests
 
         public string Address1
         {
-            get { return address1; }
-            set { address1 = value; }
+            get
+            {
+                if (address1 == null)
+                {
+                    return "";
+                }
+                else
+                {
+                    return Regex.Replace(address1, "[ \r\n]", ""); 
+                }
+            }
+            set
+            {
+                address1 = value;
+            }
         }
 
-        public string Home
+        public string HomePhone
         {
             get { return home; }
             set { home = value; }
         }
 
-        public string Mobile
+        public string MobilePhone
         {
             get { return mobile; }
             set { mobile = value; }
         }
 
-        public string Work
+        public string WorkPhone
         {
             get { return work; }
             set { work = value; }
@@ -183,6 +189,54 @@ namespace WebAddressbookTests
             set { notes = value; }
         }
 
+        public string AllMails
+        {
+            get
+            {
+                if (allMails != null)
+                {
+                    return allMails;
+                }
+                else
+                {
+                    allMails = Email1 + Email2 + Email3;
+                    return Regex.Replace(allMails, "[ \r\n]", "");
+                }
+            }
+            set
+            {
+                allMails = value;
+            }
+        }
+        public string AllPhones
+        {
+            get
+            {
+                if (allPhones != null)
+                {
+                    return allPhones;
+                }
+                else
+                {
+                    return (CleanUp(HomePhone) + CleanUp(MobilePhone) + CleanUp(WorkPhone)).Trim();
+                }
+            }
+            set
+            {
+                allPhones = value;
+            }
+        }
+
+        private string CleanUp(string phone)
+        {
+            if (phone == null || phone =="")
+            {
+                return "";
+            }
+            else
+                return phone.Replace(" ", "").Replace("-", "").Replace("(", "").Replace(")", "") + "\r\n";
+        }
+
         public bool Equals(ContactData other)
         {
             if (Object.ReferenceEquals(other, null))
@@ -193,7 +247,7 @@ namespace WebAddressbookTests
             {
                 return true;
             }
-            return (lastName == other.lastName) && (firstName == other.firstName);
+            return (LastName == other.LastName) && (FirstName == other.FirstName);
         }
     }
 }

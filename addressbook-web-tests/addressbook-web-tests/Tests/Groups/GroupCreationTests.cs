@@ -7,13 +7,24 @@ namespace WebAdressbookTests
     [TestFixture]
     public class GroupCreationTests : TestBase
     {
-        [Test]
-        public void GroupCreationTest()
+        public static IEnumerable<GroupData> RandomGroupDataProvider()
+        {
+            List<GroupData> groups = new List<GroupData>();
+            for (int i = 0; i < 5; i++)
+            {
+                groups.Add(new GroupData(GenerateRandomString(30))
+                {
+                    Header = GenerateRandomString(100),
+                    Footer = GenerateRandomString(100)
+                });
+            }
+             return groups;
+        }
+
+        [Test, TestCaseSource("RandomGroupDataProvider")]
+        public void GroupCreationTest(GroupData group)
         {
             app.Navigation.GoToGroupsPage();
-            GroupData group = new GroupData("a");
-            group.Header = "b";
-            group.Footer = "c";
             List<GroupData> oldGroups = app.Groups.GetGroupList();
 
             app.Groups.CreateNewGroup(group);

@@ -27,7 +27,7 @@ namespace WebAdressbookTests
         public static IEnumerable<GroupData> GroupDataFromCsvFile()
         {
             List<GroupData> groups = new List<GroupData>();
-            string[] lines = File.ReadAllLines(@"filename");
+            string[] lines = File.ReadAllLines(@"groups.csv");
             foreach (string l in lines)
             {
                 string[] parts = l.Split(',');
@@ -54,7 +54,7 @@ namespace WebAdressbookTests
         }
 
         [Test, TestCaseSource("GroupDataFromXmlFile")]
-        public void GroupCreationTest(GroupData group)
+        public void GroupCreationTestFromXml(GroupData group)
         {
             app.Navigation.GoToGroupsPage();
             List<GroupData> oldGroups = app.Groups.GetGroupList();
@@ -63,6 +63,19 @@ namespace WebAdressbookTests
 
             List<GroupData> newGroups = app.Groups.GetGroupList();
             Assert.AreEqual(oldGroups.Count + 1, newGroups.Count);                      
+            app.Auth.LogOut();
+        }
+
+        [Test, TestCaseSource("GroupDataFromJsonFile")]
+        public void GroupCreationTestFromJson(GroupData group)
+        {
+            app.Navigation.GoToGroupsPage();
+            List<GroupData> oldGroups = app.Groups.GetGroupList();
+
+            app.Groups.CreateNewGroup(group);
+
+            List<GroupData> newGroups = app.Groups.GetGroupList();
+            Assert.AreEqual(oldGroups.Count + 1, newGroups.Count);
             app.Auth.LogOut();
         }
     }

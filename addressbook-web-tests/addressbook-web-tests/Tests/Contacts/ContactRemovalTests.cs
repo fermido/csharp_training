@@ -4,9 +4,8 @@ using System.Collections.Generic;
 namespace WebAddressbookTests
 {
     [TestFixture]
-    public class ContactRemovalTests : TestBase
+    public class ContactRemovalTests : ContactTestBase
     {
-
         [Test]
         public void ContactRemovalTest()
         {
@@ -32,6 +31,30 @@ namespace WebAddressbookTests
             oldContacts.RemoveAt(0);
             Assert.AreEqual(oldContacts, newContacts);
             app.Auth.LogOut();
+        }
+
+        [Test]
+        public void ContactRemovalTestLoadingFromDB()
+        {
+            ContactData contact = new ContactData("First Name", "Last Name");
+            contact.MiddleName = "MiddleName";
+            contact.NickName = "NickName";
+            contact.Title = "Title";
+
+            if (!app.Contacts.IsContactExisted())
+            {
+                app.Contacts.CreateNewContact(contact);
+                app.Navigation.OpenHomePage();
+            }
+
+            List<ContactData> oldContacts = ContactData.GetDataFromDb();
+            ContactData elementRemove = oldContacts[0];
+
+            app.Contacts.Remove(elementRemove);
+            
+            List<ContactData> newContacts = ContactData.GetDataFromDb();
+            oldContacts.RemoveAt(0);
+            Assert.AreEqual(oldContacts, newContacts);
         }
     }
 }

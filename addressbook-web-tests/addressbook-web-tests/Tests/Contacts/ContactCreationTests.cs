@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
@@ -7,7 +8,7 @@ using System.Xml.Serialization;
 namespace WebAddressbookTests
 {
     [TestFixture]
-    public class ContactCreationTests : TestBase
+    public class ContactCreationTests : ContactTestBase
     {
         public static IEnumerable<ContactData> RandomContactDataProvider()
         {
@@ -85,7 +86,24 @@ namespace WebAddressbookTests
 
             List<ContactData> newContacts = app.Contacts.GetContactList();
             Assert.AreEqual(oldContacts.Count + 1, newContacts.Count);
-            app.Auth.LogOut();
+        }
+
+        [Test, TestCaseSource("ContactDataFromJsonFile")]
+        public void ContactCreationTestFromJsonLoadingFromDB(ContactData contact)
+        {
+            List<ContactData> oldContacts = app.Contacts.GetContactList();
+            
+            app.Contacts
+                .InitNewContactCreation()
+                .FillContactForm(contact)
+                .SubmitNewContactCreation();
+            app.Navigation.OpenHomePage();
+
+            List<ContactData> newContacts = app.Contacts.GetContactList();
+            oldContacts.Add(contact);
+            oldContacts.Sort();
+            newContacts.Sort();
+            Assert.AreEqual(oldContacts, newContacts);
         }
     }
 }

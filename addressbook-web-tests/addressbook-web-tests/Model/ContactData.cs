@@ -4,36 +4,23 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using LinqToDB.Mapping;
 
 namespace WebAddressbookTests
 {
-    public class ContactData : IEquatable<ContactData>
+    [Table(Name = "addressbook")]
+    public class ContactData : IEquatable<ContactData>, IComparable<ContactData>
     {
-        private string middleName = "";
-        private string nickName = "";
-        private string title = "";
-        private string company = "";
         private string address1 = "";
         private string home = "";
         private string mobile = "";
         private string work = "";
-        private string fax = "";
-        private string email1 = "";
-        private string email2 = "";
-        private string email3 = "";
-        private string homepage = "";
-        private string bday = "";
-        private string bmonth = "";
-        private string byear = "";
-        private string aday = "";
-        private string amonth = "";
-        private string ayear = "";
-        private string address2 = "";
-        private string phone = "";
-        private string notes = "";
         private string allPhones;
         private string allMails;
         private string allData;
+        private string middlename = "";
+        private string nickname = "";
+        private string title = "";
 
         public ContactData()
         {
@@ -45,35 +32,80 @@ namespace WebAddressbookTests
             LastName = lastName;
         }
 
+        [Column(Name = "id"), PrimaryKey, Identity]
+        public string Id { get; set; }
+
+        [Column(Name = "firstname")]
         public string FirstName { get; set; }
 
+        [Column(Name = "lastname")]
         public string LastName { get; set; }
 
+        [Column(Name = "middlename")]
         public string MiddleName
         {
-            get { return middleName; }
-            set { middleName = value; }
+            get
+            {
+                if (middlename == null)
+                {
+                    return "";
+                }
+                else
+                {
+                    return middlename;
+                }
+            }
+            set
+            {
+                middlename = value;
+            }
         }
 
+        [Column(Name = "nickname")]
         public string NickName
         {
-            get { return nickName; }
-            set { nickName = value; }
+            get
+            {
+                if (nickname == null)
+                {
+                    return "";
+                }
+                else
+                {
+                    return nickname;
+                }
+            }
+            set
+            {
+                nickname = value;
+            }
         }
 
+        [Column(Name = "title")]
         public string Title
         {
-            get { return title; }
-            set { title = value; }
+            get
+            {
+                if (title == null)
+                {
+                    return "";
+                }
+                else
+                {
+                    return title;
+                }
+            }
+            set
+            {
+                title = value;
+            }
         }
 
-        public string Company
-        {
-            get { return company; }
-            set { company = value; }
-        }
-
-        public string HomePhone
+        [Column(Name = "company")] 
+        public string Company { get; set; }
+        
+        [Column(Name = "home")]
+        public string HomePhone 
         {
             get
             {
@@ -92,6 +124,7 @@ namespace WebAddressbookTests
             }
         }
 
+        [Column(Name = "mobile")]
         public string MobilePhone
         {
             get
@@ -111,6 +144,7 @@ namespace WebAddressbookTests
             }
         }
 
+        [Column(Name = "work")]
         public string WorkPhone
         {
            get
@@ -130,90 +164,43 @@ namespace WebAddressbookTests
             }
         }
 
-        public string Fax
-        {
-            get { return fax; }
-            set { fax = value; }
-        }
+        [Column(Name = "fax")]
+        public string Fax { get; set; }
+        
+        [Column(Name = "email")] 
+        public string Email1 { get; set; }
+        
+        [Column(Name = "email2")]
+        public string Email2 { get; set; }
+        
+        [Column(Name = "email3")] 
+        public string Email3 { get; set; }
+        
+        [Column(Name = "homepage")]
+        public string Homepage { get; set; }
+        
+        public string Bday { get; set; }
+       
+        public string Bmonth { get; set; }
+       
+        public string Byear { get; set; }
+        
+        public string Aday { get; set; }
+        
+        public string Amonth { get; set; }
+        
+        public string Ayear { get; set; }
+        
+        public string Address2 { get; set; }
+        
+        public string Phone { get; set; }
+        
+        public string Notes { get; set; }
 
-        public string Email1
-        {
-            get { return email1; }
-            set { email1 = value; }
-        }
-
-        public string Email2
-        {
-            get { return email2; }
-            set { email2 = value; }
-        }
-
-        public string Email3
-        {
-            get { return email3; }
-            set { email3 = value; }
-        }
-
-        public string Homepage
-        {
-            get { return homepage; }
-            set { homepage = value; }
-        }
-
-        public string Bday
-        {
-            get { return bday; }
-            set { bday = value; }
-        }
-
-        public string Bmonth
-        {
-            get { return bmonth; }
-            set { bmonth = value; }
-        }
-
-        public string Byear
-        {
-            get { return byear; }
-            set { byear = value; }
-        }
-
-        public string Aday
-        {
-            get { return aday; }
-            set { aday = value; }
-        }
-
-        public string Amonth
-        {
-            get { return amonth; }
-            set { amonth = value; }
-        }
-
-        public string Ayear
-        {
-            get { return ayear; }
-            set { ayear = value; }
-        }
-
-        public string Address2
-        {
-            get { return address2; }
-            set { address2 = value; }
-        }
-
-        public string Phone
-        {
-            get { return phone; }
-            set { phone = value; }
-        }
-
-        public string Notes
-        {
-            get { return notes; }
-            set { notes = value; }
-        }
-
+        [Column(Name = "deprecated")]
+        public string Deprecated { get; set; }
+        
+        [Column(Name = "address")]
         public string Address1
         {
             get
@@ -356,6 +343,43 @@ namespace WebAddressbookTests
             }
             return (LastName == other.LastName) && (FirstName == other.FirstName);
         }
+
+        public int CompareTo(ContactData other)
+        {
+            if (Object.ReferenceEquals(other, null))
+            {
+                return 1;
+            }
+            if (FirstName.CompareTo(other.FirstName) == 0)
+            {
+                if (LastName.CompareTo(other.LastName) == 0)
+                {
+                    return 0;
+                }
+                else
+                {
+                    return 1;
+                }
+            }
+            else
+            {
+                return 1;
+            }
+        }
+
+        public override string ToString()
+        {
+            return String.Format("FirstName=${0},LastName=${1}", FirstName, LastName);
+        }
+
+        public static List<ContactData> GetDataFromDb()
+        {
+            using (AddressBookDB db = new AddressBookDB())
+            {
+                return (from c in db.Contacts.Where(x => x.Deprecated == "0000-00-00 00:00:00") select c).ToList();
+            }
+        }
+
     }
 }
 

@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
+using System.Linq;
 using WebAddressbookTests;
 using Newtonsoft.Json;
+using System;
 
-namespace WebAdressbookTests 
+namespace WebAdressbookTests
 {
     [TestFixture]
-    public class GroupCreationTests : TestBase
+    public class GroupCreationTests : GroupTestBase
     {
         public static IEnumerable<GroupData> RandomGroupDataProvider()
         {
@@ -62,8 +64,10 @@ namespace WebAdressbookTests
             app.Groups.CreateNewGroup(group);
 
             List<GroupData> newGroups = app.Groups.GetGroupList();
-            Assert.AreEqual(oldGroups.Count + 1, newGroups.Count);                      
-            app.Auth.LogOut();
+            oldGroups.Add(group);
+            oldGroups.Sort();
+            newGroups.Sort();
+            Assert.AreEqual(oldGroups, newGroups);
         }
 
         [Test, TestCaseSource("GroupDataFromJsonFile")]
@@ -75,8 +79,41 @@ namespace WebAdressbookTests
             app.Groups.CreateNewGroup(group);
 
             List<GroupData> newGroups = app.Groups.GetGroupList();
-            Assert.AreEqual(oldGroups.Count + 1, newGroups.Count);
-            app.Auth.LogOut();
+            oldGroups.Add(group);
+            oldGroups.Sort();
+            newGroups.Sort();
+            Assert.AreEqual(oldGroups, newGroups);
         }
+
+        [Test, TestCaseSource("GroupDataFromJsonFile")]
+        public void GroupCreationTestLoadingFromDB(GroupData group)
+        {
+            app.Navigation.GoToGroupsPage();
+            List<GroupData> oldGroups = GroupData.GetDataFromDb();
+
+            app.Groups.CreateNewGroup(group);
+
+            List<GroupData> newGroups = GroupData.GetDataFromDb();
+            oldGroups.Add(group);
+            oldGroups.Sort();
+            newGroups.Sort();
+            Assert.AreEqual(oldGroups, newGroups);
+        }
+
+
+        [Test]
+        public void TestDBConnectivity()
+        {
+            DateTime start = DateTime.Now;
+            List<GroupData> fromUi = app.Groups.GetGroupList();
+            DateTime end = DateTime.Now;
+            System.Console.Out.WriteLine(end.Subtract(start));
+
+            start = DateTime.Now;
+            List<GroupData> fromDb = GroupData.GetDataFromDb();
+            end = DateTime.Now;
+            System.Console.Out.WriteLine(end.Subtract(start));
+        }
+
     }
 }

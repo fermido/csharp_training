@@ -9,6 +9,7 @@ namespace WebAddressbookTests
 {
     public class TestBase
     {
+        public static bool PERFORM_LONG_CHECKS = true;
         protected ApplicationManager app;
 
         [SetUp]
@@ -16,12 +17,12 @@ namespace WebAddressbookTests
         {
             app = new ApplicationManager();
             app.Navigation.OpenHomePage();
-            app.Auth.Login(new AccountData("admin", "secret"));
         }
 
         [TearDown]
         public void TeardownTest()
         {
+            app.Auth.LogOut();
             app.Stop();
         }
 
